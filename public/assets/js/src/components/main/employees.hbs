@@ -1,0 +1,57 @@
+{{~scope 'employees'}}
+
+{{~fetch '/users/get/department-employees/by/farm' | as 'res' }}
+{{~ json res.employees | as 'employeess'}}
+
+<div class="container__main__center">
+    <h4 class="container__main__center__title">Employees</h4>
+    <p {{click "User.downloadEmployeesCSV(event)" }} data-employees='{{employeess}}' style="cursor: pointer;">Download CSV report</p>
+
+    <div class="card table">
+        <div class="table__header">
+            <ul class="table__header__row flex">
+                <li class="table__header__row__item short">#</li>
+                <li class="table__header__row__item">Full name</li>
+                <li class="table__header__row__item">Email address</li>
+                <li class="table__header__row__item">Department</li>
+
+                <li class="table__header__row__item">Added on</li>
+
+                {{#same userDetails.role 'Department manager'}}
+                    <li class="table__header__row__item">...</li>
+                {{/same}}
+            </ul>
+        </div>
+        <div class="table__body">
+            {{#each res.employees}}
+                <ul class="table__body__row flex">
+                    <li class="table__body__row__item short">{{index}}</li>
+                    <li class="table__body__row__item">{{this.fullname}}</li>
+                    <li class="table__body__row__item">{{this.email}}</li>
+                    <li class="table__body__row__item">{{this.department}}</li>
+
+                    <li class="table__body__row__item">{{datetime this.createdOn}}</li>
+                
+                    {{#same userDetails.role 'Department manager'}}
+                        <li class="table__body__row__item">
+                            <span {{click "User.removeUser('<<this.id>>', 'Employee')"}}>Remove</span>
+                        </li>
+                    {{/same}}
+                </ul>
+            {{/each}}
+        </div>
+    </div>
+
+    {{#same userDetails.role 'Department manager'}}
+        <p class="margin--top-2 flex" style="cursor: pointer;" {{click "Util.openModal('new-department-employee')"}}>
+            <svg class="image--icon margin--right-1">
+                <use href="#add"></use>
+            </svg>
+            <span>Add department employee</span>
+        </p>
+    {{/same}}
+
+    <a download id="download-anchor"></a>
+
+    {{component 'modals/department-employee'}}
+</div>

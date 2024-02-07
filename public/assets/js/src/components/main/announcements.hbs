@@ -1,0 +1,53 @@
+{{~scope 'announcements'}}
+{{~fetch '/announcements/get/by/farm' | as 'res' }}
+
+
+<div class="container__main__center">
+    <h4 class="container__main__center__title">Announcements</h4>
+
+    <div class="announcements flex">
+        {{#each res.announcements}}
+            <div class="announcements__item flex pos--rel">
+                <div class="announcements__item__profile image--round image--back margin--right-1" style="background-image: url('/assets/uploads/profiles/blank.jpg');"></div>
+                <div class="announcements__item__details">
+                    <h4>{{this.fullname}} ({{this.sender_type}})</h4>
+                    <p>{{this.subject}}</p>
+                    <p>{{this.message}}</p>
+                    <p style="cursor: pointer; color: #6C63FF;" {{click "Announcement.remove('<<this.id>>')" }}>Remove</p>
+                </div>
+                <div class="pos--abs" style="right: 1rem; top: 1rem;">
+                    <p>{{datetime this.createdOn}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+    {{#same userDetails.role 'Owner'}}
+        <p class="margin--top-2 flex" style="cursor: pointer;" {{click "Util.openModal('new-announcement')"}}>
+            <svg class="image--icon margin--right-1">
+                <use href="#message"></use>
+            </svg>
+            <span>Send announcement</span>
+        </p>
+    {{/same}}
+
+    {{#same userDetails.role 'Project manager'}}
+        <p class="margin--top-2 flex" style="cursor: pointer;" {{click "Util.openModal('new-announcement')"}}>
+            <svg class="image--icon margin--right-1">
+                <use href="#message"></use>
+            </svg>
+            <span>Send announcement</span>
+        </p>
+    {{/same}}
+
+    {{#same userDetails.role 'Department manager'}}
+        <p class="margin--top-2 flex" style="cursor: pointer;" {{click "Util.openModal('new-announcement')"}}>
+            <svg class="image--icon margin--right-1">
+                <use href="#message"></use>
+            </svg>
+            <span>Send announcement</span>
+        </p>
+    {{/same}}
+
+    {{component 'modals/announcement'}}
+</div>

@@ -1,0 +1,74 @@
+{{~scope 'task.manager'}}
+{{~fetch '/task/get/by/farm' | as 'res' }}
+{{~ json res.tasks | as 'taskss'}}
+
+<div class="container__main__center">
+    <h4 class="container__main__center__title">Task manager</h4>
+    <p {{click "Task.downloadCSV(event)" }} data-tasks='{{taskss}}' style="cursor: pointer;">Download CSV report</p>
+
+    <div class="card table">
+        <div class="table__header">
+            <ul class="table__header__row flex">
+                <li class="table__header__row__item short">#</li>
+                <li class="table__header__row__item">Project</li>
+                <li class="table__header__row__item">Objective</li>
+                <li class="table__header__row__item">Lead (Reporting) Employee</li>
+                <li class="table__header__row__item">Progress</li>
+                <li class="table__header__row__item">Created on</li>
+                
+                {{#same userDetails.role 'Employee'}}
+                    <li class="table__header__row__item">...</li>
+                {{/same}}
+
+                {{#same userDetails.role 'Department manager'}}
+                    <li class="table__header__row__item">...</li>
+                {{/same}}
+            </ul>
+        </div>
+        <div class="table__body">
+            {{#each res.tasks}}
+                <ul class="table__body__row flex">
+                    <li class="table__body__row__item short">{{index}}</li>
+                    <li class="table__body__row__item">{{this.name}}</li>
+                    <li class="table__body__row__item">{{this.objective}}</li>
+                    <li class="table__body__row__item">{{this.fullname}}</li>
+                    <li class="table__body__row__item">{{this.progress}}</li>
+                    <li class="table__body__row__item">{{datetime this.createdOn}}</li>
+
+                    {{#same userDetails.role 'Department manager'}}
+                        <li class="table__body__row__item" style="cursor: pointer;" {{click "Task.remove('<<this.id>>')"}}>Delete</li>
+                    {{/same}}
+
+                    {{#same userDetails.fullname this.fullname}}
+                        {{#same this.progress 'pending'}}
+                            <li class="table__body__row__item" style="cursor: pointer;"  {{click "Task.start('<<this.id>>')"}}>Start task</li>
+                        {{/same}}
+                        {{#same this.progress 'ongoing'}}
+                            <li class="table__body__row__item" style="cursor: pointer;" {{click "Task.finish('<<this.id>>')" }}>Finish task</li>
+                        {{/same}}
+                        {{#same this.progress 'done'}}
+                            <li class="table__body__row__item" style="cursor: pointer;">No action</li>
+                        {{/same}}
+                    {{else}}
+                        {{#same userDetails.role 'Employee'}}
+                            <li class="table__body__row__item">No action</li>
+                        {{/same}}
+                    {{/same}}
+                </ul>
+            {{/each}}
+        </div>
+    </div>
+
+    {{#same userDetails.role 'Department manager'}}
+        <p class="margin--top-2 flex" style="cursor: pointer;" {{click "Util.openModal('new-task')"}}>
+            <svg class="image--icon margin--right-1">
+                <use href="#add"></use>
+            </svg>
+            <span>Add task</span>
+        </p>
+    {{/same}}
+
+    <a download id="download-anchor"></a>
+
+    {{component 'modals/task'}}
+</div>
