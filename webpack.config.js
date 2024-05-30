@@ -22,7 +22,8 @@ module.exports = {
     },
     watch: true,
     cache: false,
-    watchOptions: {
+    watchOptions: 
+    {
         ignored: /node_modules/
     }
 }
