@@ -1,4 +1,5 @@
 Overview
+
 This Project Management System is designed to help managers efficiently inform owners about ongoing processes within the organization. It offers functionalities such as task scheduling, meeting management, progress tracking, and communication facilitation through task updates and announcements. Developed using Node.js, TypeScript, and MySQL databases, this system provides a robust solution for organizational management and communication.
 
 Features
