@@ -1,8 +1,23 @@
+# Ignore the entire node_modules directory
 node_modules
+
+# Ignore all files in the public/assets/uploads/profiles directory
 public/assets/uploads/profiles/*
+
+# But do not ignore the specific file blank.jpg in the public/assets/uploads/profiles directory
 !public/assets/uploads/profiles/blank.jpg
+
+# Ignore all files in the public/assets/uploads/thumbnails directory
 public/assets/uploads/thumbnails/*
+
+# But do not ignore the specific file default-playlist.jpg in the public/assets/uploads/thumbnails directory
 !public/assets/uploads/thumbnails/default-playlist.jpg
+
+# But do not ignore the specific file default-video.png in the public/assets/uploads/thumbnails directory
 !public/assets/uploads/thumbnails/default-video.png
+
+# Ignore all files in the public/assets/uploads/videos directory
 public/assets/uploads/videos/*
+
+# Ignore the package-lock.json file
 package-lock.json
